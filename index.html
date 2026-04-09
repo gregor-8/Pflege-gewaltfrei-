@@ -88,7 +88,7 @@
             flex-direction: column;
             gap: 20px;
             align-items: center;
-            margin-bottom: 15px; /* Etwas Platz für den Hinweis darunter */
+            margin-bottom: 15px;
         }
 
         @media(min-width: 600px) {
@@ -119,7 +119,6 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
-        /* NEU: Styling für den Weiterleitungs-Hinweis */
         .redirect-note {
             font-size: 0.9rem;
             color: #1a1a3a;
@@ -185,16 +184,16 @@
             font-weight: 700;
             text-transform: uppercase;
             transition: color 0.3s ease;
-            cursor: pointer; /* Zeigt, dass es klickbar ist */
+            cursor: pointer;
         }
 
         .footer-nav a:hover {
             color: #1a1a3a;
         }
 
-        /* NEU: Content-Sektionen standardmäßig verstecken */
+        /* Content-Sektionen standardmäßig verstecken */
         .content-section {
-            display: none; /* Macht den Bereich unsichtbar */
+            display: none;
             padding: 60px 20px;
             max-width: 800px;
             margin: 0 auto;
@@ -202,9 +201,9 @@
             background-color: #ffffff;
             border-top: 2px solid #a4bdf6;
             position: relative;
+            line-height: 1.6;
         }
 
-        /* Diese Klasse wird per JavaScript hinzugefügt, um den Text zu zeigen */
         .content-section.active {
             display: block;
             animation: fadeIn 0.5s ease-in-out;
@@ -223,7 +222,31 @@
             margin-top: 0;
         }
 
-        /* NEU: Schließen-Button für die Info-Texte */
+        .content-section h4 {
+            font-size: 1.3rem;
+            color: #7b4dff;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+        
+        .content-section h5 {
+            font-size: 1.1rem;
+            color: #1a1a3a;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .content-section a {
+            color: #7b4dff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .content-section a:hover {
+            text-decoration: underline;
+        }
+
+        /* Schließen-Button für die Info-Texte */
         .close-btn {
             background: none;
             border: 2px solid #1a1a3a;
@@ -233,13 +256,31 @@
             font-family: 'Montserrat', sans-serif;
             border-radius: 5px;
             cursor: pointer;
-            margin-top: 20px;
+            margin-top: 30px;
             transition: all 0.3s;
+            display: block;
         }
 
         .close-btn:hover {
             background-color: #1a1a3a;
             color: #ffffff;
+        }
+
+        /* Mobile Anpassungen für den Footer */
+        @media(max-width: 768px) {
+            footer {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            .footer-left {
+                flex-direction: column;
+                justify-content: center;
+            }
+            .footer-nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -264,7 +305,6 @@
 
             <div class="button-container">
                 <a href="http://www.Pflegeperson.de" class="btn">Ich bin Pflegeperson</a>
-                
                 <a href="http://www.angehoeriger.de" class="btn">Ich bin Angehörige/r</a>
             </div>
 
@@ -285,50 +325,150 @@
                     <li><a onclick="showSection('ueber-uns')">Über uns</a></li>
                     <li><a onclick="showSection('was-tun-bei-gewalt')">Was tun bei Gewalt</a></li>
                     <li><a onclick="showSection('impressum')">Impressum</a></li>
+                    <li><a onclick="showSection('datenschutz')">Datenschutz</a></li>
                 </ul>
             </nav>
         </div>
     </footer>
 
     <section id="ueber-uns" class="content-section">
-        <h3>Über uns</h3>
-        <p>Über uns – Unser Projekt für mehr Sicherheit in der Pflege
-
-Wir sind eine engagierte Gruppe von Studierenden im Bachelorstudiengang „Management im Gesundheitswesen“ an der Technischen Hochschule Würzburg-Schweinfurt (THWS). Im Rahmen unseres Praxisprojekts widmen wir uns einem sensiblen, aber enorm wichtigen Thema: dem Gewaltschutz in der stationären Altenpflege.
-
-Unser übergeordnetes Ziel ist es, einen praxisnahen Leitfaden für Pflegeheime zu entwickeln. Dieser soll Einrichtungen dabei unterstützen, wirksame Schutzkonzepte zu etablieren, um die Sicherheit, Würde und das Wohlbefinden der Bewohnerinnen und Bewohner nachhaltig zu stärken.
-
-Warum diese Umfrage?
-Um einen Leitfaden zu erarbeiten, der in der Praxis wirklich funktioniert und hilft, müssen wir die Realität vor Ort genau verstehen. Mit dieser Befragung möchten wir den aktuellen Ist-Zustand in den Einrichtungen erfassen und konkrete Bedarfe ermitteln.
-
-Dabei sind wir auf Ihre offenen und ehrlichen Erfahrungen angewiesen – ganz gleich, ob Sie als Pflegekraft täglich in den Heimen arbeiten oder als Angehörige bzw. Angehöriger Einblicke in den Pflegealltag haben. Nur wenn wir hinsehen und zuhören, können wir gemeinsam etwas verbessern.
-
-Ihre Teilnahme ist vollständig anonym. Ihre Antworten fließen direkt in unsere Forschung ein und helfen uns maßgeblich dabei, die Pflege ein Stück sicherer und menschlicher zu machen.
-
-Vielen Dank für Ihre Zeit, Ihre Unterstützung und Ihr Vertrauen! </p>
+        <h3>Über uns – Unser Projekt für mehr Sicherheit in der Pflege</h3>
+        <p>Wir sind eine engagierte Gruppe von Studierenden im Bachelorstudiengang „Management im Gesundheitswesen“ an der Technischen Hochschule Würzburg-Schweinfurt (THWS). Im Rahmen unseres Praxisprojekts widmen wir uns einem sensiblen, aber enorm wichtigen Thema: dem Gewaltschutz in der stationären Altenpflege.</p>
+        <p>Unser übergeordnetes Ziel ist es, einen praxisnahen Leitfaden für Pflegeheime zu entwickeln. Dieser soll Einrichtungen dabei unterstützen, wirksame Schutzkonzepte zu etablieren, um die Sicherheit, Würde und das Wohlbefinden der Bewohnerinnen und Bewohner nachhaltig zu stärken.</p>
+        <h4>Warum diese Umfrage?</h4>
+        <p>Um einen Leitfaden zu erarbeiten, der in der Praxis wirklich funktioniert und hilft, müssen wir die Realität vor Ort genau verstehen. Mit dieser Befragung möchten wir den aktuellen Ist-Zustand in den Einrichtungen erfassen und konkrete Bedarfe ermitteln.</p>
+        <p>Dabei sind wir auf Ihre offenen und ehrlichen Erfahrungen angewiesen – ganz gleich, ob Sie als Pflegekraft täglich in den Heimen arbeiten oder als Angehörige bzw. Angehöriger Einblicke in den Pflegealltag haben. Nur wenn wir hinsehen und zuhören, können wir gemeinsam etwas verbessern.</p>
+        <p>Ihre Teilnahme ist vollständig anonym. Ihre Antworten fließen direkt in unsere Forschung ein und helfen uns maßgeblich dabei, die Pflege ein Stück sicherer und menschlicher zu machen.</p>
+        <p><strong>Vielen Dank für Ihre Zeit, Ihre Unterstützung und Ihr Vertrauen!</strong></p>
         <button class="close-btn" onclick="closeSection('ueber-uns')">Schließen</button>
     </section>
 
     <section id="was-tun-bei-gewalt" class="content-section">
-        <h3>Was tun bei Gewalt</h3>
-        <p>Bei Verdacht auf Gewalt wenden Sie sich bitte an die zuständige Heimaufsicht oder nutzen Sie die Hilfe-Hotlines:</p>
-        <ul>
-            <li>Heimaufsicht [HINWEIS: Hier den konkreten Link oder die Adresse einfügen]</li>
-            <li>Pflege-SOS Bayern: [HINWEIS: Hier den Link oder die Telefonnummer einfügen]</li>
-        </ul>
-        <p>Schauen Sie nicht weg. Holen Sie sich Hilfe.</p>
+        <h3>Was tun bei Gewalt?</h3>
+        <p>Schauen Sie nicht weg. Holen Sie sich Hilfe. Bei Verdacht auf Gewalt in der Pflege gibt es konkrete Anlaufstellen.</p>
+        <h4>In Bayern: Pflege-SOS Bayern</h4>
+        <p>Das Pflege-SOS-Bayern ist unter der Telefonnummer <a href="tel:096219669660">09621 966 966 0</a> (kostenfrei aus Mobilfunk und Festnetz) oder per E-Mail unter <a href="mailto:Pflege-SOS@lfp.bayern.de">Pflege-SOS@lfp.bayern.de</a> zu erreichen.</p>
+        <p>Außerdem steht auf der Pflege-SOS-Bayern-Seite im Netz ein Onlineformular zur Meldung von Beschwerden zur Verfügung:<br>
+        <a href="https://www.lfp.bayern.de/sospflege/" target="_blank">Zur Website von Pflege-SOS Bayern</a></p>
+        <h4>In anderen Bundesländern: Heimaufsicht</h4>
+        <p>In den anderen Bundesländern können Sie sich an die jeweiligen Heimaufsichten (je nach Bundesland auch WTG-Behörde oder FQA genannt) wenden. Diese sind regional unterschiedlich (z.B. auf Landratsamt- oder Stadtebene) organisiert. Suchen Sie hierfür am besten online nach dem Begriff "Heimaufsicht" in Verbindung mit Ihrem jeweiligen Landkreis oder Ihrer Stadt.</p>
         <button class="close-btn" onclick="closeSection('was-tun-bei-gewalt')">Schließen</button>
     </section>
 
     <section id="impressum" class="content-section">
         <h3>Impressum</h3>
-        <p>Dies ist der Platzhalter für das Impressum, das noch erstellt wird. Hier kommen Angaben gemäß § 5 TMG hin, wie Anbieterkennzeichnung, Kontaktinformationen, Vertretungsberechtigte etc.</p>
+        <p><strong>Angaben gemäß § 5 DDG:</strong></p>
+        <p>Gregor Heydenreich<br>
+        Schleifweg 4<br>
+        97286 Sommerhausen</p>
+        
+        <p><strong>Kontakt:</strong><br>
+        E-Mail: <a href="#" class="protected-email" data-user="gregor.heydenreich" data-domain="gmail.com">E-Mail Adresse laden...</a></p>
+        
+        <p><strong>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV:</strong><br>
+        Gregor Heydenreich<br>
+        Schleifweg 4<br>
+        97286 Sommerhausen</p>
+
+        <p><em>Hinweis: Diese Website dient ausschließlich der Informationsvermittlung und Weiterleitung zu einer wissenschaftlichen Umfrage im Rahmen eines studentischen Projekts der THWS Würzburg-Schweinfurt. Es werden auf dieser Seite keine eigenen Daten erhoben.</em></p>
         <button class="close-btn" onclick="closeSection('impressum')">Schließen</button>
     </section>
 
+    <section id="datenschutz" class="content-section">
+        <h3>Datenschutzerklärung</h3>
+        
+        <h4>1. Datenschutz auf einen Blick</h4>
+        <h5>Allgemeine Hinweise</h5>
+        <p>Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können. Ausführliche Informationen zum Thema Datenschutz entnehmen Sie unserer unter diesem Text aufgeführten Datenschutzerklärung.</p>
+        
+        <h5>Datenerfassung auf dieser Website</h5>
+        <p><strong>Wer ist verantwortlich für die Datenerfassung auf dieser Website?</strong><br>
+        Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen Kontaktdaten können Sie dem Abschnitt „Hinweis zur Verantwortlichen Stelle“ in dieser Datenschutzerklärung entnehmen.</p>
+        <p><strong>Wie erfassen wir Ihre Daten?</strong><br>
+        Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen. Hierbei kann es sich z. B. um Daten handeln, die Sie in ein Kontaktformular eingeben. Andere Daten werden automatisch oder nach Ihrer Einwilligung beim Besuch der Website durch unsere IT-Systeme erfasst. Das sind vor allem technische Daten (z. B. Internetbrowser, Betriebssystem oder Uhrzeit des Seitenaufrufs). Die Erfassung dieser Daten erfolgt automatisch, sobald Sie diese Website betreten.</p>
+        <p><strong>Wofür nutzen wir Ihre Daten?</strong><br>
+        Ein Teil der Daten wird erhoben, um eine fehlerfreie Bereitstellung der Website zu gewährleisten. Andere Daten können zur Analyse Ihres Nutzerverhaltens verwendet werden. Sofern über die Website Verträge geschlossen oder angebahnt werden können, werden die übermittelten Daten auch für Vertragsangebote, Bestellungen oder sonstige Auftragsanfragen verarbeitet.</p>
+        <p><strong>Welche Rechte haben Sie bezüglich Ihrer Daten?</strong><br>
+        Sie haben jederzeit das Recht, unentgeltlich Auskunft über Herkunft, Empfänger und Zweck Ihrer gespeicherten personenbezogenen Daten zu erhalten. Sie haben außerdem ein Recht, die Berichtigung oder Löschung dieser Daten zu verlangen. Wenn Sie eine Einwilligung zur Datenverarbeitung erteilt haben, können Sie diese Einwilligung jederzeit für die Zukunft widerrufen. Außerdem haben Sie das Recht, unter bestimmten Umständen die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen. Des Weiteren steht Ihnen ein Beschwerderecht bei der zuständigen Aufsichtsbehörde zu.</p>
+        
+        <h5>Analyse-Tools und Tools von Drittanbietern</h5>
+        <p>Beim Besuch dieser Website kann Ihr Surf-Verhalten statistisch ausgewertet werden. Das geschieht vor allem mit sogenannten Analyseprogrammen.</p>
+
+        <h4>2. Hosting</h4>
+        <h5>Externes Hosting</h5>
+        <p>Diese Website wird extern gehostet. Die personenbezogenen Daten, die auf dieser Website erfasst werden, werden auf den Servern des Hosters / der Hoster gespeichert. Hierbei kann es sich v. a. um IP-Adressen, Kontaktanfragen, Meta- und Kommunikationsdaten, Vertragsdaten, Kontaktdaten, Namen, Websitezugriffe und sonstige Daten, die über eine Website generiert werden, handeln.</p>
+        <p>Das externe Hosting erfolgt zum Zwecke der Vertragserfüllung gegenüber unseren potenziellen und bestehenden Kunden (Art. 6 Abs. 1 lit. b DSGVO) und im Interesse einer sicheren, schnellen und effizienten Bereitstellung unseres Online-Angebots durch einen professionellen Anbieter (Art. 6 Abs. 1 lit. f DSGVO). Sofern eine entsprechende Einwilligung abgefragt wurde, erfolgt die Verarbeitung ausschließlich auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO und § 25 Abs. 1 TDDDG, soweit die Einwilligung die Speicherung von Cookies oder den Zugriff auf Informationen im Endgerät des Nutzers (z. B. Device-Fingerprinting) im Sinne des TDDDG umfasst. Die Einwilligung ist jederzeit widerrufbar.</p>
+        <p>Unser(e) Hoster wird bzw. werden Ihre Daten nur insoweit verarbeiten, wie dies zur Erfüllung seiner Leistungspflichten erforderlich ist und unsere Weisungen in Bezug auf diese Daten befolgen.</p>
+        <p><strong>Wir setzen folgende(n) Hoster ein:</strong><br>GitHub Pages</p>
+
+        <h4>3. Allgemeine Hinweise und Pflichtinformationen</h4>
+        <h5>Datenschutz</h5>
+        <p>Die Betreiber dieser Seiten nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend den gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung. Wenn Sie diese Website benutzen, werden verschiedene personenbezogene Daten erhoben. Personenbezogene Daten sind Daten, mit denen Sie persönlich identifiziert werden können. Die vorliegende Datenschutzerklärung erläutert, welche Daten wir erheben und wofür wir sie nutzen. Sie erläutert auch, wie und zu welchem Zweck das geschieht. Wir weisen darauf hin, dass die Datenübertragung im Internet (z. B. bei der Kommunikation per E-Mail) Sicherheitslücken aufweisen kann. Ein lückenloser Schutz der Daten vor dem Zugriff durch Dritte ist nicht möglich.</p>
+        
+        <h5>Hinweis zur verantwortlichen Stelle</h5>
+        <p>Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:</p>
+        <p>Gregor Heydenreich<br>Schleifweg 4<br>97286 Sommerhausen<br>Telefon: +49 (0) 123 44 55 66<br>E-Mail: gregor.heydenreich@gmail.com</p>
+        <p>Verantwortliche Stelle ist die natürliche oder juristische Person, die allein oder gemeinsam mit anderen über die Zwecke und Mittel der Verarbeitung von personenbezogenen Daten (z. B. Namen, E-Mail-Adressen o. Ä.) entscheidet.</p>
+        
+        <h5>Speicherdauer</h5>
+        <p>Soweit innerhalb dieser Datenschutzerklärung keine speziellere Speicherdauer genannt wurde, verbleiben Ihre personenbezogenen Daten bei uns, bis der Zweck für die Datenverarbeitung entfällt. Wenn Sie ein berechtigtes Löschersuchen geltend machen oder eine Einwilligung zur Datenverarbeitung widerrufen, werden Ihre Daten gelöscht, sofern wir keine anderen rechtlich zulässigen Gründe für die Speicherung Ihrer personenbezogenen Daten haben (z. B. steuer- oder handelsrechtliche Aufbewahrungsfristen); im letztgenannten Fall erfolgt die Löschung nach Fortfall dieser Gründe.</p>
+        
+        <h5>Allgemeine Hinweise zu den Rechtsgrundlagen der Datenverarbeitung</h5>
+        <p>Sofern Sie in die Datenverarbeitung eingewilligt haben, verarbeiten wir Ihre personenbezogenen Daten auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO bzw. Art. 9 Abs. 2 lit. a DSGVO, sofern besondere Datenkategorien nach Art. 9 Abs. 1 DSGVO verarbeitet werden. Im Falle einer ausdrücklichen Einwilligung in die Übertragung personenbezogener Daten in Drittstaaten erfolgt die Datenverarbeitung außerdem auf Grundlage von Art. 49 Abs. 1 lit. a DSGVO. Sofern Sie in die Speicherung von Cookies oder in den Zugriff auf Informationen in Ihr Endgerät (z. B. via Device-Fingerprinting) eingewilligt haben, erfolgt die Datenverarbeitung zusätzlich auf Grundlage von § 25 Abs. 1 TDDDG. Die Einwilligung ist jederzeit widerrufbar. Sind Ihre Daten zur Vertragserfüllung oder zur Durchführung vorvertraglicher Maßnahmen erforderlich, verarbeiten wir Ihre Daten auf Grundlage des Art. 6 Abs. 1 lit. b DSGVO. Des Weiteren verarbeiten wir Ihre Daten, sofern diese zur Erfüllung einer rechtlichen Verpflichtung erforderlich sind auf Grundlage von Art. 6 Abs. 1 lit. c DSGVO. Die Datenverarbeitung kann ferner auf Grundlage unseres berechtigten Interesses nach Art. 6 Abs. 1 lit. f DSGVO erfolgen. Über die jeweils im Einzelfall einschlägigen Rechtsgrundlagen wird in den folgenden Absätzen dieser Datenschutzerklärung informiert.</p>
+        
+        <h5>Empfänger von personenbezogenen Daten</h5>
+        <p>Im Rahmen unserer Geschäftstätigkeit arbeiten wir mit verschiedenen externen Stellen zusammen. Dabei ist teilweise auch eine Übermittlung von personenbezogenen Daten an diese externen Stellen erforderlich. Wir geben personenbezogene Daten nur dann an externe Stellen weiter, wenn dies im Rahmen einer Vertragserfüllung erforderlich ist, wenn wir gesetzlich hierzu verpflichtet sind (z. B. Weitergabe von Daten an Steuerbehörden), wenn wir ein berechtigtes Interesse nach Art. 6 Abs. 1 lit. f DSGVO an der Weitergabe haben oder wenn eine sonstige Rechtsgrundlage die Datenweitergabe erlaubt. Beim Einsatz von Auftragsverarbeitern geben wir personenbezogene Daten unserer Kunden nur auf Grundlage eines gültigen Vertrags über Auftragsverarbeitung weiter. Im Falle einer gemeinsamen Verarbeitung wird ein Vertrag über gemeinsame Verarbeitung geschlossen.</p>
+        
+        <h5>Widerruf Ihrer Einwilligung zur Datenverarbeitung</h5>
+        <p>Viele Datenverarbeitungsvorgänge sind nur mit Ihrer ausdrücklichen Einwilligung möglich. Sie können eine bereits erteilte Einwilligung jederzeit widerrufen. Die Rechtmäßigkeit der bis zum Widerruf erfolgten Datenverarbeitung bleibt vom Widerruf unberührt.</p>
+        
+        <h5>Widerspruchsrecht gegen die Datenerhebung in besonderen Fällen sowie gegen Direktwerbung (Art. 21 DSGVO)</h5>
+        <p>WENN DIE DATENVERARBEITUNG AUF GRUNDLAGE VON ART. 6 ABS. 1 LIT. E ODER F DSGVO ERFOLGT, HABEN SIE JEDERZEIT DAS RECHT, AUS GRÜNDEN, DIE SICH AUS IHRER BESONDEREN SITUATION ERGEBEN, GEGEN DIE VERARBEITUNG IHRER PERSONENBEZOGENEN DATEN WIDERSPRUCH EINZULEGEN; DIES GILT AUCH FÜR EIN AUF DIESE BESTIMMUNGEN GESTÜTZTES PROFILING. DIE JEWEILIGE RECHTSGRUNDLAGE, AUF DENEN EINE VERARBEITUNG BERUHT, ENTNEHMEN SIE DIESER DATENSCHUTZERKLÄRUNG. WENN SIE WIDERSPRUCH EINLEGEN, WERDEN WIR IHRE BETROFFENEN PERSONENBEZOGENEN DATEN NICHT MEHR VERARBEITEN, ES SEI DENN, WIR KÖNNEN ZWINGENDE SCHUTZWÜRDIGE GRÜNDE FÜR DIE VERARBEITUNG NACHWEISEN, DIE IHRE INTERESSEN, RECHTE UND FREIHEITEN ÜBERWIEGEN ODER DIE VERARBEITUNG DIENT DER GELTENDMACHUNG, AUSÜBUNG ODER VERTEIDIGUNG VON RECHTSANSPRÜCHEN (WIDERSPRUCH NACH ART. 21 ABS. 1 DSGVO).<br><br>WERDEN IHRE PERSONENBEZOGENEN DATEN VERARBEITET, UM DIREKTWERBUNG ZU BETREIBEN, SO HABEN SIE DAS RECHT, JEDERZEIT WIDERSPRUCH GEGEN DIE VERARBEITUNG SIE BETREFFENDER PERSONENBEZOGENER DATEN ZUM ZWECKE DERARTIGER WERBUNG EINZULEGEN; DIES GILT AUCH FÜR DAS PROFILING, SOWEIT ES MIT SOLCHER DIREKTWERBUNG IN VERBINDUNG STEHT. WENN SIE WIDERSPRECHEN, WERDEN IHRE PERSONENBEZOGENEN DATEN ANSCHLIESSEND NICHT MEHR ZUM ZWECKE DER DIREKTWERBUNG VERWENDET (WIDERSPRUCH NACH ART. 21 ABS. 2 DSGVO).</p>
+        
+        <h5>Beschwerderecht bei der zuständigen Aufsichtsbehörde</h5>
+        <p>Im Falle von Verstößen gegen die DSGVO steht den Betroffenen ein Beschwerderecht bei einer Aufsichtsbehörde, insbesondere in dem Mitgliedstaat ihres gewöhnlichen Aufenthalts, ihres Arbeitsplatzes oder des Orts des mutmaßlichen Verstoßes zu. Das Beschwerderecht besteht unbeschadet anderweitiger verwaltungsrechtlicher oder gerichtlicher Rechtsbehelfe.</p>
+        
+        <h5>Recht auf Datenübertragbarkeit</h5>
+        <p>Sie haben das Recht, Daten, die wir auf Grundlage Ihrer Einwilligung oder in Erfüllung eines Vertrags automatisiert verarbeiten, an sich oder an einen Dritten in einem gängigen, maschinenlesbaren Format aushändigen zu lassen. Sofern Sie die direkte Übertragung der Daten an einen anderen Verantwortlichen verlangen, erfolgt dies nur, soweit es technisch machbar ist.</p>
+        
+        <h5>Auskunft, Berichtigung und Löschung</h5>
+        <p>Sie haben im Rahmen der geltenden gesetzlichen Bestimmungen jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger und den Zweck der Datenverarbeitung und ggf. ein Recht auf Berichtigung oder Löschung dieser Daten. Hierzu sowie zu weiteren Fragen zum Thema personenbezogene Daten können Sie sich jederzeit an uns wenden.</p>
+        
+        <h5>Recht auf Einschränkung der Verarbeitung</h5>
+        <p>Sie haben das Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen. Hierzu können Sie sich jederzeit an uns wenden. Das Recht auf Einschränkung der Verarbeitung besteht in folgenden Fällen:</p>
+        <ul>
+            <li>Wenn Sie die Richtigkeit Ihrer bei uns gespeicherten personenbezogenen Daten bestreiten, benötigen wir in der Regel Zeit, um dies zu überprüfen. Für die Dauer der Prüfung haben Sie das Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.</li>
+            <li>Wenn die Verarbeitung Ihrer personenbezogenen Daten unrechtmäßig geschah/geschieht, können Sie statt der Löschung die Einschränkung der Datenverarbeitung verlangen.</li>
+            <li>Wenn wir Ihre personenbezogenen Daten nicht mehr benötigen, Sie sie jedoch zur Ausübung, Verteidigung oder Geltendmachung von Rechtsansprüchen benötigen, haben Sie das Recht, statt der Löschung die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.</li>
+            <li>Wenn Sie einen Widerspruch nach Art. 21 Abs. 1 DSGVO eingelegt haben, muss eine Abwägung zwischen Ihren und unseren Interessen vorgenommen werden. Solange noch nicht feststeht, wessen Interessen überwiegen, haben Sie das Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.</li>
+        </ul>
+        <p>Wenn Sie die Verarbeitung Ihrer personenbezogenen Daten eingeschränkt haben, dürfen diese Daten - von ihrer Speicherung abgesehen - nur mit Ihrer Einwilligung oder zur Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen oder zum Schutz der Rechte einer anderen natürlichen oder juristischen Person oder aus Gründen eines wichtigen öffentlichen Interesses der Europäischen Union oder eines Mitgliedstaats verarbeitet werden.</p>
+
+        <h4>4. Datenerfassung auf dieser Website</h4>
+        <h5>Server-Log-Dateien</h5>
+        <p>Der Provider der Seiten erhebt und speichert automatisch Informationen in so genannten Server-Log-Dateien, die Ihr Browser automatisch an uns übermittelt. Dies sind: Browsertyp und Browserversion, verwendetes Betriebssystem, Referrer URL, Hostname des zugreifenden Rechners, Uhrzeit der Serveranfrage, IP-Adresse. Eine Zusammenführung dieser Daten mit anderen Datenquellen wird nicht vorgenommen. Die Erfassung dieser Daten erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Der Websitebetreiber hat ein berechtigtes Interesse an der technisch fehlerfreien Darstellung und der Optimierung seiner Website - hierzu müssen die Server-Log-Files erfasst werden.</p>
+        <p><em>Quelle: https://www.e-recht24.de</em></p>
+
+        <button class="close-btn" onclick="closeSection('datenschutz')">Schließen</button>
+    </section>
+
     <script>
+        // Spamschutz: Setzt die E-Mail Adresse zusammen, sobald die Seite geladen ist
+        document.addEventListener("DOMContentLoaded", function() {
+            const emailLinks = document.querySelectorAll('.protected-email');
+            emailLinks.forEach(function(link) {
+                const user = link.getAttribute('data-user');
+                const domain = link.getAttribute('data-domain');
+                const fullEmail = user + '@' + domain;
+                
+                link.href = 'mailto:' + fullEmail;
+                link.textContent = fullEmail;
+            });
+        });
+
+        // Menü-Navigation
         function showSection(sectionId) {
-            // Zuerst alle Sektionen verstecken, falls schon eine offen ist
+            // Zuerst alle Sektionen verstecken
             const sections = document.querySelectorAll('.content-section');
             sections.forEach(sec => sec.classList.remove('active'));
 
@@ -341,8 +481,8 @@ Vielen Dank für Ihre Zeit, Ihre Unterstützung und Ihr Vertrauen! </p>
             }
         }
 
+        // Schließen-Buttons
         function closeSection(sectionId) {
-            // Spezifische Sektion wieder verstecken
             const targetSection = document.getElementById(sectionId);
             if (targetSection) {
                 targetSection.classList.remove('active');
