@@ -1,1 +1,344 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sicher über die Kreuzung - Ampel-Dino Evolution</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* GLOBALE VARIABLEN FÜR WACHSTUM UND FARBE */
+        :root {
+            --dino-color-level: #4ade80; /* Standard Grün für Lvl 1 */
+            --dino-color-level-accents: #22c55e;
+            --dino-current-scale: 1.0; /* Skalierungsfaktor für Animationen */
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f3f4f6;
+            overscroll-behavior-y: contain; /* Verhindert Pull-to-Refresh auf Handys */
+        }
+        
+        #dino-container {
+            /* Basis-Größe (Lvl 1), wird im JS überschrieben */
+            width: 192px; 
+            height: 192px;
+            transform-origin: bottom center; /* Wächst nach oben */
+            transition: all 0.5s ease-out; /* Weicher Übergang für Wachstum und Farbwandel */
+        }
+
+        /* Dino Animationen - angepasst an aktuelle Skalierung */
+        @keyframes float {
+            0% { transform: translateY(0px) scale(var(--dino-current-scale)); }
+            50% { transform: translateY(-10px) scale(var(--dino-current-scale)); }
+            100% { transform: translateY(0px) scale(var(--dino-current-scale)); }
+        }
+        .dino-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0) scale(var(--dino-current-scale)); }
+            25% { transform: translateX(-5px) rotate(-5deg) scale(var(--dino-current-scale)); }
+            75% { transform: translateX(5px) rotate(5deg) scale(var(--dino-current-scale)); }
+        }
+        .dino-shake {
+            animation: shake 0.5s ease-in-out infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) scale(var(--dino-current-scale)); }
+            50% { transform: translateY(-20px) scale(var(--dino-current-scale)); }
+        }
+        .dino-bounce {
+            animation: bounce 0.6s ease-in-out infinite;
+        }
+
+        /* Konfetti für den Erfolg */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4 text-slate-800 relative overflow-hidden">
+
+    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[85vh] max-h-[800px] border-4 border-slate-100 relative z-10">
+        
+        <div class="bg-indigo-600 text-white p-4 text-center rounded-b-3xl shadow-md z-20">
+            <h1 class="text-2xl font-black tracking-wide">Dein Ampel-Dino</h1>
+            <div class="mt-2 bg-indigo-800 rounded-full h-6 w-full flex items-center p-1 relative">
+                <div id="xp-bar" class="bg-green-400 h-full rounded-full transition-all duration-500 ease-out" style="width: 0%;"></div>
+                <span class="absolute inset-0 flex items-center justify-center text-xs font-bold" id="level-text">Level 1 (0/100 XP)</span>
+            </div>
+        </div>
+
+        <div class="flex-1 flex flex-col items-center justify-center p-6 relative">
+            
+            <div id="confetti-container" class="absolute inset-0 pointer-events-none"></div>
+
+            <div id="dino-container" class="mx-auto mb-6 dino-float transition-all duration-300">
+                </div>
+
+            <div class="bg-slate-50 border-2 border-slate-200 rounded-2xl p-4 text-center w-full shadow-inner min-h-[100px] flex items-center justify-center">
+                <p id="message-text" class="text-lg font-bold text-slate-600">
+                    Hallo! Ich wachse und ändere meine Farbe, wenn du beim Überqueren der Straße nicht aufs Handy schaust!
+                </p>
+            </div>
+        </div>
+
+        <div class="p-6 bg-slate-50 border-t border-slate-200">
+            <button id="start-btn" onclick="startCrossing()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xl py-5 rounded-2xl shadow-[0_6px_0_0_#4338ca] active:shadow-[0_0px_0_0_#4338ca] active:translate-y-[6px] transition-all">
+                🚶‍♂️ Ich überquere jetzt!
+            </button>
+
+            <button id="reset-btn" onclick="resetState()" class="w-full bg-green-500 hover:bg-green-400 text-white font-black text-xl py-5 rounded-2xl shadow-[0_6px_0_0_#16a34a] active:shadow-[0_0px_0_0_#16a34a] active:translate-y-[6px] transition-all hidden">
+                Weitergehen
+            </button>
+        </div>
+    </div>
+
+    <template id="dino-normal">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <path d="M60 140 Q 60 180, 80 180 Q 90 180, 90 160 L 90 140 Z" fill="var(--dino-color-level)"/> <path d="M120 140 Q 120 180, 140 180 Q 150 180, 150 160 L 150 140 Z" fill="var(--dino-color-level-accents)"/> <path d="M50 100 Q 50 30, 120 40 Q 170 50, 170 100 Q 170 150, 120 150 Q 50 150, 50 100 Z" fill="var(--dino-color-level)"/> <path d="M140 30 Q 150 10, 160 30 Z" fill="var(--dino-color-level-accents)"/> <path d="M110 20 Q 120 0, 130 20 Z" fill="var(--dino-color-level-accents)"/> <path d="M80 30 Q 90 10, 100 30 Z" fill="var(--dino-color-level-accents)"/> <circle cx="90" cy="80" r="8" fill="#1e293b"/> <circle cx="140" cy="80" r="8" fill="#1e293b"/> <path d="M100 100 Q 115 115, 130 100" fill="none" stroke="#1e293b" stroke-width="5" stroke-linecap="round"/> </svg>
+    </template>
+
+    <template id="dino-sad">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <path d="M60 140 Q 60 180, 80 180 Q 90 180, 90 160 L 90 140 Z" fill="#f87171"/>
+            <path d="M120 140 Q 120 180, 140 180 Q 150 180, 150 160 L 150 140 Z" fill="#ef4444"/>
+            <path d="M50 100 Q 50 30, 120 40 Q 170 50, 170 100 Q 170 150, 120 150 Q 50 150, 50 100 Z" fill="#f87171"/>
+            <circle cx="90" cy="80" r="8" fill="#1e293b"/> 
+            <circle cx="140" cy="80" r="8" fill="#1e293b"/> 
+            <path d="M90 70 L 100 75 M 140 70 L 130 75" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/> <path d="M100 110 Q 115 95, 130 110" fill="none" stroke="#1e293b" stroke-width="5" stroke-linecap="round"/> <path d="M160 50 Q 170 40, 180 50 Q 170 60, 160 50 Z" fill="#60a5fa"/> </svg>
+    </template>
+
+    <template id="dino-happy">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <path d="M60 140 Q 60 180, 80 180 Q 90 180, 90 160 L 90 140 Z" fill="#fbbf24"/>
+            <path d="M120 140 Q 120 180, 140 180 Q 150 180, 150 160 L 150 140 Z" fill="#f59e0b"/>
+            <path d="M50 100 Q 50 30, 120 40 Q 170 50, 170 100 Q 170 150, 120 150 Q 50 150, 50 100 Z" fill="#fbbf24"/>
+            <path d="M85 75 Q 90 70, 95 75" fill="none" stroke="#1e293b" stroke-width="5" stroke-linecap="round"/> <path d="M135 75 Q 140 70, 145 75" fill="none" stroke="#1e293b" stroke-width="5" stroke-linecap="round"/> <path d="M95 95 Q 115 120, 135 95 Z" fill="#1e293b"/> <path d="M105 105 Q 115 110, 125 105 Z" fill="#ef4444"/> </svg>
+    </template>
+
+    <script>
+        // --- KONFIGURATION ---
+        const REQUIRED_CROSSING_TIME = 15;
+        const XP_PER_LEVEL = 100;
+        const REWARD_XP = 50;
+        const PENALTY_XP = 30;
+
+        // --- KONFIGURATION FÜR WACHSTUM UND FARBEN NACH LEVEL ---
+        // maxLvl: Bis zu welchem Level gilt diese Stufe?
+        // sizePx: Die visuelle Breite/Höhe des Dinos in Pixeln
+        // color: Die Primärfarbe des Körpers
+        // accents: Die Sekundärfarbe für Beine/Zacken
+        const LEVEL_TIERS = [
+            { maxLvl: 1, sizePx: 192, color: '#4ade80', accents: '#22c55e' }, // Lvl 1: Standard Grün (Tailwind w-48)
+            { maxLvl: 3, sizePx: 212, color: '#60a5fa', accents: '#3b82f6' }, // Lvl 2-3: Blau (+10%)
+            { maxLvl: 6, sizePx: 232, color: '#a78bfa', accents: '#8b5cf6' }, // Lvl 4-6: Lila (+20%)
+            { maxLvl: 9, sizePx: 252, color: '#fca5a5', accents: '#f87171' }, // Lvl 7-9: Rosa (+30%)
+            { maxLvl: Infinity, sizePx: 272, color: '#fbbf24', accents: '#f59e0b' } // Lvl 10+: Gold (+40%)
+        ];
+
+        // --- STATE MANAGEMENT ---
+        let appState = 'IDLE'; 
+        let lockTime = 0;
+        let userData = {
+            level: 1,
+            xp: 0
+        };
+
+        // DOM Elemente
+        const dinoContainer = document.getElementById('dino-container');
+        const messageText = document.getElementById('message-text');
+        const startBtn = document.getElementById('start-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const xpBar = document.getElementById('xp-bar');
+        const levelText = document.getElementById('level-text');
+
+        // Initialisierung
+        function init() {
+            const savedData = localStorage.getItem('ampelDinoData');
+            if (savedData) {
+                userData = JSON.parse(savedData);
+            }
+            updateUIStats();
+            updateDinoAppearance(userData.level); // <--- Neu: Wachstumsstatus setzen
+            setDinoMood('normal');
+        }
+
+        // Speichere Fortschritt
+        function saveData() {
+            localStorage.setItem('ampelDinoData', JSON.stringify(userData));
+            updateUIStats();
+        }
+
+        // --- WACHSTUMS- UND FARBLOGIK ---
+        function updateDinoAppearance(level) {
+            // 1. Finde die richtige Stufe für das aktuelle Level
+            const tier = LEVEL_TIERS.find(t => level <= t.maxLvl) || LEVEL_TIERS[LEVEL_TIERS.length - 1];
+
+            // 2. Visuelle Größe des Containers anpassen
+            dinoContainer.style.width = tier.sizePx + 'px';
+            dinoContainer.style.height = tier.sizePx + 'px';
+
+            // 3. CSS-Variablen für die Farben im Normal-Zustand setzen
+            document.documentElement.style.setProperty('--dino-color-level', tier.color);
+            document.documentElement.style.setProperty('--dino-color-level-accents', tier.accents);
+            
+            // 4. Ein Skalierungsfaktor für die CSS-Animationen setzen, damit Vibrationen/Schweben proportional bleiben
+            const baseSize = 192; // Basis-Größe für Lvl 1
+            const scaleFactor = tier.sizePx / baseSize;
+            document.documentElement.style.setProperty('--dino-current-scale', scaleFactor);
+
+            // Ein kleiner visueller Versatz nach unten, damit der Dino am Boden bleibt, wenn er wächst
+            const offset = (tier.sizePx - baseSize) / 2;
+            dinoContainer.style.transform = `scale(1) translateY(-${offset}px)`; // Basis-Transformation ist scale(1), Animationen addieren dazu
+        }
+
+        // --- HAUPTLOGIK ---
+
+        function startCrossing() {
+            appState = 'WAITING_FOR_LOCK';
+            
+            startBtn.classList.add('hidden');
+            setDinoMood('normal', 'dino-shake'); // Dino zittert leicht in Erwartung
+            
+            messageText.innerHTML = `
+                <span class="text-red-600 font-black text-2xl block mb-2">ACHTUNG!</span>
+                Sperre <b>JETZT</b> dein Display und steck das Handy ein!<br>
+                <span class="text-sm text-slate-500 mt-2 block">(Entsperre es erst auf der anderen Seite der Ampel)</span>
+            `;
+
+            if (navigator.vibrate) navigator.vibrate(200);
+        }
+
+        document.addEventListener("visibilitychange", () => {
+            if (document.hidden) {
+                if (appState === 'WAITING_FOR_LOCK') {
+                    appState = 'CROSSING';
+                    lockTime = Date.now();
+                }
+            } else {
+                if (appState === 'CROSSING') {
+                    appState = 'RESULT';
+                    let elapsedSeconds = (Date.now() - lockTime) / 1000;
+                    if (elapsedSeconds >= REQUIRED_CROSSING_TIME) {
+                        handleSuccess(elapsedSeconds);
+                    } else {
+                        handleFail(elapsedSeconds);
+                    }
+                }
+            }
+        });
+
+        // --- ERGEBNISSE ---
+
+        function handleSuccess(seconds) {
+            setDinoMood('happy', 'dino-bounce');
+            
+            userData.xp += REWARD_XP;
+            checkLevelUp();
+            saveData();
+
+            messageText.innerHTML = `
+                <span class="text-green-600 font-black text-2xl block mb-2">SUPER! 🎉</span>
+                Du hast ${Math.round(seconds)} Sekunden nicht aufs Handy geschaut.<br>
+                <b>+${REWARD_XP} XP</b> für deinen Dino!
+            `;
+            
+            showResetButton();
+            createConfetti();
+            if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 500]);
+        }
+
+        function handleFail(seconds) {
+            setDinoMood('sad', 'none');
+            
+            userData.xp = Math.max(0, userData.xp - PENALTY_XP);
+            saveData();
+
+            messageText.innerHTML = `
+                <span class="text-red-600 font-black text-xl block mb-2">DAS WAR ZU FRÜH! 😢</span>
+                Du hast das Handy nach ${Math.round(seconds)} Sekunden angemacht. 
+                Dein Dino hat sich erschreckt.<br>
+                <b class="text-red-500">-${PENALTY_XP} XP</b>
+            `;
+            
+            showResetButton();
+            if (navigator.vibrate) navigator.vibrate(800);
+        }
+
+        function checkLevelUp() {
+            if (userData.xp >= XP_PER_LEVEL) {
+                userData.level++;
+                userData.xp = userData.xp - XP_PER_LEVEL;
+                updateDinoAppearance(userData.level); // <--- Neu: Bei Level-Up Wachstum prüfen/auslösen
+            }
+        }
+
+        // --- UI HELPER FUNKTIONEN ---
+
+        function resetState() {
+            appState = 'IDLE';
+            startBtn.classList.remove('hidden');
+            resetBtn.classList.add('hidden');
+            setDinoMood('normal');
+            messageText.innerHTML = "Bereit für die nächste Kreuzung? Ich warte auf dich!";
+            document.getElementById('confetti-container').innerHTML = '';
+        }
+
+        function showResetButton() {
+            resetBtn.classList.remove('hidden');
+        }
+
+        function updateUIStats() {
+            let percentage = (userData.xp / XP_PER_LEVEL) * 100;
+            xpBar.style.width = percentage + '%';
+            levelText.innerText = `Level ${userData.level} (${userData.xp}/${XP_PER_LEVEL} XP)`;
+        }
+
+        function setDinoMood(mood, animationClass = 'dino-float') {
+            const template = document.getElementById(`dino-${mood}`);
+            dinoContainer.innerHTML = template.innerHTML;
+            
+            // Größenklassen w-48 h-48 entfernt, Größe wird im JS/updateDinoAppearance gesetzt
+            dinoContainer.className = `mx-auto mb-6 transition-all duration-300 ${animationClass}`;
+        }
+
+        function createConfetti() {
+            const container = document.getElementById('confetti-container');
+            const colors = ['#fce7f3', '#fef08a', '#bbf7d0', '#bfdbfe', '#e9d5ff'];
+            
+            for (let i = 0; i < 50; i++) {
+                const conf = document.createElement('div');
+                conf.className = 'confetti rounded-full absolute top-0';
+                conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                conf.style.left = Math.random() * 100 + '%';
+                
+                const duration = Math.random() * 2 + 1;
+                const delay = Math.random() * 0.5;
+                
+                conf.animate([
+                    { transform: `translate3d(0, 0, 0) rotate(0deg)`, opacity: 1 },
+                    { transform: `translate3d(${Math.random() * 100 - 50}px, ${window.innerHeight}px, 0) rotate(${Math.random() * 720}deg)`, opacity: 0 }
+                ], {
+                    duration: duration * 1000,
+                    delay: delay * 1000,
+                    easing: 'cubic-bezier(.37,0,.63,1)',
+                    fill: 'forwards'
+                });
+                
+                container.appendChild(conf);
+            }
+        }
+
+        init();
+
+    </script>
+</body>
+</html>
 
