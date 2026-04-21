@@ -82,6 +82,50 @@
             line-height: 1.5;
         }
 
+        /* ------------------------------------- */
+        /* Countdown & Ablauf-Nachricht          */
+        /* ------------------------------------- */
+        .countdown-container {
+            background-color: #ffffff;
+            border: 2px solid #7b4dff;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .countdown-container p {
+            margin: 0;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .countdown-timer {
+            color: #7b4dff;
+            font-size: 1.2rem !important;
+            font-weight: 900 !important;
+            margin-top: 5px !important;
+        }
+
+        .expired-message {
+            background-color: #1a1a3a;
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+            display: none; /* Standardmäßig ausgeblendet */
+        }
+        /* ------------------------------------- */
+
         /* Buttons für die Auswahl */
         .button-container {
             display: flex;
@@ -89,6 +133,7 @@
             gap: 20px;
             align-items: center;
             margin-bottom: 15px;
+            width: 100%;
         }
 
         @media(min-width: 600px) {
@@ -133,6 +178,31 @@
             text-transform: uppercase;
             font-size: 1.1rem;
             margin-top: 20px;
+        }
+
+        /* ------------------------------------- */
+        /* PLATZSPAREN FÜR MOBILE ANSICHT        */
+        /* ------------------------------------- */
+        @media(max-width: 600px) {
+            header { padding: 25px 20px; }
+            h1 { font-size: 2.5rem; margin-bottom: 5px; }
+            h2 { font-size: 1rem; }
+            main { padding: 30px 20px; }
+            
+            .highlight-text { margin-bottom: 15px; font-size: 1.2rem; }
+            
+            /* Countdown extrem kompakt machen */
+            .countdown-container { padding: 10px 15px; margin-bottom: 15px; }
+            .countdown-container p { font-size: 0.85rem; }
+            .countdown-timer { font-size: 1.1rem !important; margin-top: 2px !important; }
+            
+            .description { margin-bottom: 15px; font-size: 1.1rem; }
+            
+            /* Buttons kompakter machen */
+            .button-container { gap: 12px; margin-bottom: 10px; }
+            .btn { padding: 15px 20px; font-size: 1.1rem; }
+            
+            .redirect-note { margin-bottom: 25px; }
         }
 
         /* Footer-Bereich mit Logo und Menü */
@@ -297,17 +367,25 @@
         <div class="main-content">
             <p class="highlight-text">Hinschauen. Zuhören. Schützen.</p>
             
-            <p class="description">
+            <div id="countdown-container" class="countdown-container">
+                <p>Zeit für die Beantwortung bis 15.05.2026:</p>
+                <p id="countdown-timer" class="countdown-timer">Berechne Zeit...</p>
+            </div>
+
+            <div id="expired-message" class="expired-message">
+                Der Zeitraum für die Befragung ist vorbei. Vielen Dank für Ihre Unterstützung!
+            </div>
+
+            <p class="description" id="role-description">
                 Bitte wählen Sie Ihre Rolle aus, um zum Fragebogen zu gelangen:
             </p>
-            
 
-            <div class="button-container">
+            <div class="button-container" id="survey-buttons">
                 <a href="https://www.survio.com/survey/d/X4W1E8E4F2G3A7A6Q" class="btn">Ich bin Pflegeperson</a>
                 <a href="https://www.survio.com/survey/d/J9F7I9A3I8T8U3T5N" class="btn">Ich bin Angehörige/r</a>
             </div>
 
-            <p class="redirect-note">Hinweis: Mit Klick auf die Auswahl werden Sie auf die entsprechende Fragebogen-Website weitergeleitet.</p>
+            <p class="redirect-note" id="redirect-note">Hinweis: Mit Klick auf die Auswahl werden Sie auf die entsprechende Fragebogen-Website weitergeleitet.</p>
 
             <p class="footer-note">Teilnahme vollständig<br>freiwillig und anonym</p>
 
@@ -464,29 +542,63 @@
             emailLinks.forEach(function(link) {
                 const user = link.getAttribute('data-user');
                 const domain = link.getAttribute('data-domain');
-                const fullEmail = user + '@' + domain;
-                
-                link.href = 'mailto:' + fullEmail;
-                link.textContent = fullEmail;
+                if (user && domain) {
+                    const fullEmail = user + '@' + domain;
+                    link.href = 'mailto:' + fullEmail;
+                    link.textContent = fullEmail;
+                }
             });
+
+            // Countdown und Sichtbarkeits-Logik
+            const targetDate = new Date("2026-05-15T00:00:00").getTime();
+            
+            const countdownContainer = document.getElementById("countdown-container");
+            const countdownTimer = document.getElementById("countdown-timer");
+            const surveyButtons = document.getElementById("survey-buttons");
+            const redirectNote = document.getElementById("redirect-note");
+            const roleDescription = document.getElementById("role-description");
+            const expiredMessage = document.getElementById("expired-message");
+
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+
+                if (distance <= 0) {
+                    // Zeit ist abgelaufen!
+                    clearInterval(timerInterval); 
+                    
+                    countdownContainer.style.display = "none";
+                    surveyButtons.style.display = "none";
+                    redirectNote.style.display = "none";
+                    roleDescription.style.display = "none";
+                    
+                    expiredMessage.style.display = "block";
+                } else {
+                    // Zeit berechnen
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    
+                    countdownTimer.innerHTML = `Noch ${days} Tage, ${hours} Stunden, ${minutes} Minuten`;
+                }
+            }
+
+            updateCountdown();
+            const timerInterval = setInterval(updateCountdown, 1000);
         });
 
         // Menü-Navigation
         function showSection(sectionId) {
-            // Zuerst alle Sektionen verstecken
             const sections = document.querySelectorAll('.content-section');
             sections.forEach(sec => sec.classList.remove('active'));
 
-            // Dann die geklickte Sektion anzeigen
             const targetSection = document.getElementById(sectionId);
             if (targetSection) {
                 targetSection.classList.add('active');
-                // Sanft zur Sektion scrollen
                 targetSection.scrollIntoView({ behavior: 'smooth' });
             }
         }
 
-        // Schließen-Buttons
         function closeSection(sectionId) {
             const targetSection = document.getElementById(sectionId);
             if (targetSection) {
