@@ -83,29 +83,31 @@
         }
 
         /* ------------------------------------- */
-        /* NEU: Countdown & Ablauf-Nachricht     */
+        /* Countdown & Ablauf-Nachricht          */
         /* ------------------------------------- */
         .countdown-container {
             background-color: #ffffff;
             border: 2px solid #7b4dff;
             border-radius: 8px;
-            padding: 20px;
+            padding: 15px 20px;
             margin-bottom: 30px;
             width: 100%;
+            max-width: 600px;
             box-sizing: border-box;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
 
         .countdown-container p {
-            margin: 5px 0;
+            margin: 0;
             font-weight: 700;
+            font-size: 1rem;
         }
 
         .countdown-timer {
             color: #7b4dff;
-            font-size: 1.2rem;
-            font-weight: 900;
-            margin-top: 10px !important;
+            font-size: 1.2rem !important;
+            font-weight: 900 !important;
+            margin-top: 5px !important;
         }
 
         .expired-message {
@@ -118,6 +120,7 @@
             margin-bottom: 30px;
             text-align: center;
             width: 100%;
+            max-width: 600px;
             box-sizing: border-box;
             display: none; /* Standardmäßig ausgeblendet */
         }
@@ -175,6 +178,31 @@
             text-transform: uppercase;
             font-size: 1.1rem;
             margin-top: 20px;
+        }
+
+        /* ------------------------------------- */
+        /* PLATZSPAREN FÜR MOBILE ANSICHT        */
+        /* ------------------------------------- */
+        @media(max-width: 600px) {
+            header { padding: 25px 20px; }
+            h1 { font-size: 2.5rem; margin-bottom: 5px; }
+            h2 { font-size: 1rem; }
+            main { padding: 30px 20px; }
+            
+            .highlight-text { margin-bottom: 15px; font-size: 1.2rem; }
+            
+            /* Countdown extrem kompakt machen */
+            .countdown-container { padding: 10px 15px; margin-bottom: 15px; }
+            .countdown-container p { font-size: 0.85rem; }
+            .countdown-timer { font-size: 1.1rem !important; margin-top: 2px !important; }
+            
+            .description { margin-bottom: 15px; font-size: 1.1rem; }
+            
+            /* Buttons kompakter machen */
+            .button-container { gap: 12px; margin-bottom: 10px; }
+            .btn { padding: 15px 20px; font-size: 1.1rem; }
+            
+            .redirect-note { margin-bottom: 25px; }
         }
 
         /* Footer-Bereich mit Logo und Menü */
@@ -339,18 +367,19 @@
         <div class="main-content">
             <p class="highlight-text">Hinschauen. Zuhören. Schützen.</p>
             
-            <p class="description" id="role-description">
-                Bitte wählen Sie Ihre Rolle aus, um zum Fragebogen zu gelangen:
-            </p>
-
             <div id="countdown-container" class="countdown-container">
-                <p>Für die Beantwortung der Fragebögen ist bis zum 15.05.2026 Zeit.</p>
+                <p>Zeit für die Beantwortung bis 15.05.2026:</p>
                 <p id="countdown-timer" class="countdown-timer">Berechne Zeit...</p>
             </div>
 
             <div id="expired-message" class="expired-message">
                 Der Zeitraum für die Befragung ist vorbei. Vielen Dank für Ihre Unterstützung!
             </div>
+
+            <p class="description" id="role-description">
+                Bitte wählen Sie Ihre Rolle aus, um zum Fragebogen zu gelangen:
+            </p>
+
             <div class="button-container" id="survey-buttons">
                 <a href="https://www.survio.com/survey/d/X4W1E8E4F2G3A7A6Q" class="btn">Ich bin Pflegeperson</a>
                 <a href="https://www.survio.com/survey/d/J9F7I9A3I8T8U3T5N" class="btn">Ich bin Angehörige/r</a>
@@ -404,20 +433,16 @@
             emailLinks.forEach(function(link) {
                 const user = link.getAttribute('data-user');
                 const domain = link.getAttribute('data-domain');
-                const fullEmail = user + '@' + domain;
-                
-                link.href = 'mailto:' + fullEmail;
-                link.textContent = fullEmail;
+                if (user && domain) {
+                    const fullEmail = user + '@' + domain;
+                    link.href = 'mailto:' + fullEmail;
+                    link.textContent = fullEmail;
+                }
             });
 
-            // ------------------------------------- 
-            // NEU: Countdown und Sichtbarkeits-Logik
-            // ------------------------------------- 
-            
-            // Ziel-Datum setzen (15. Mai 2026, 00:00:00 Uhr)
+            // Countdown und Sichtbarkeits-Logik
             const targetDate = new Date("2026-05-15T00:00:00").getTime();
             
-            // Elemente aus dem DOM holen
             const countdownContainer = document.getElementById("countdown-container");
             const countdownTimer = document.getElementById("countdown-timer");
             const surveyButtons = document.getElementById("survey-buttons");
@@ -431,15 +456,13 @@
 
                 if (distance <= 0) {
                     // Zeit ist abgelaufen!
-                    clearInterval(timerInterval); // Intervall stoppen
+                    clearInterval(timerInterval); 
                     
-                    // Countdown, Buttons und Texte ausblenden
                     countdownContainer.style.display = "none";
                     surveyButtons.style.display = "none";
                     redirectNote.style.display = "none";
                     roleDescription.style.display = "none";
                     
-                    // Dankes-Nachricht einblenden
                     expiredMessage.style.display = "block";
                 } else {
                     // Zeit berechnen
@@ -447,35 +470,26 @@
                     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                     
-                    // Anzeige aktualisieren
                     countdownTimer.innerHTML = `Noch ${days} Tage, ${hours} Stunden, ${minutes} Minuten`;
                 }
             }
 
-            // Direkt einmal ausführen, damit beim Laden kein "Berechne Zeit..." stehen bleibt
             updateCountdown();
-            
-            // Danach jede Sekunde aktualisieren
             const timerInterval = setInterval(updateCountdown, 1000);
-            // ------------------------------------- 
         });
 
         // Menü-Navigation
         function showSection(sectionId) {
-            // Zuerst alle Sektionen verstecken
             const sections = document.querySelectorAll('.content-section');
             sections.forEach(sec => sec.classList.remove('active'));
 
-            // Dann die geklickte Sektion anzeigen
             const targetSection = document.getElementById(sectionId);
             if (targetSection) {
                 targetSection.classList.add('active');
-                // Sanft zur Sektion scrollen
                 targetSection.scrollIntoView({ behavior: 'smooth' });
             }
         }
 
-        // Schließen-Buttons
         function closeSection(sectionId) {
             const targetSection = document.getElementById(sectionId);
             if (targetSection) {
