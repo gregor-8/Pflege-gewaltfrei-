@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gewaltschutz in Pflegeheim - Umfrage & Info</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Grundlegende Einstellungen */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            color: #1a1a3a;
+            scroll-behavior: smooth;
+        }
+
+        /* Header mit rosa Hintergrund */
+        header {
+            background-color: #ffa3e4;
+            padding: 40px 20px;
+            text-align: left;
+        }
+
+        .header-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 900;
+            color: #1a1a3a;
+            line-height: 1.1;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            font-weight: 900;
+            color: #ffffff;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        /* Hauptbereich mit Farbverlauf */
+        main {
+            background: linear-gradient(to right, #d0f0eb 0%, #a4bdf6 100%);
+            flex-grow: 1;
+            padding: 50px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .main-content {
+            max-width: 800px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .highlight-text {
+            color: #7b4dff;
+            font-weight: 900;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+
+        .description {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 40px;
+            line-height: 1.5;
+        }
+
+        /* Formular Styling */
+        .form-group {
+            width: 100%;
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #1a1a3a;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #a4bdf6;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        /* Countdown & Ablauf-Nachricht */
+        .countdown-container {
+            background-color: #ffffff;
+            border: 2px solid #7b4dff;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .countdown-container p { margin: 0; font-weight: 700; font-size: 1rem; }
+        .countdown-timer { color: #7b4dff; font-size: 1.2rem !important; font-weight: 900 !important; margin-top: 5px !important; }
+
+        .expired-message {
+            background-color: #1a1a3a;
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+            display: none;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        @media(min-width: 600px) { .button-container { flex-direction: row; justify-content: center; } }
+
+        .btn {
+            background-color: #1a1a3a;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 20px 40px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 300px;
+            box-sizing: border-box;
+            border: 2px solid transparent;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .btn:hover { background-color: #7b4dff; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(to right, #d0f0eb 0%, #a4bdf6 100%);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .footer-left { display: flex; align-items: center; gap: 10px; color: #1a1a3a; text-align: left; }
+        .thws-logo { max-height: 50px; width: auto; }
+        .footer-nav ul { list-style: none; padding: 0; margin: 0; display: flex; gap: 20px; }
+        .footer-nav a { text-decoration: none; color: #7b4dff; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; cursor: pointer; }
+        .footer-nav a:hover { color: #1a1a3a; }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            padding: 60px 20px;
+            max-width: 800px;
+            margin: 20px auto;
+            text-align: left;
+            background-color: #ffffff;
+            border-top: 2px solid #a4bdf6;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+        .content-section.active { display: block; animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .content-section h3 { font-size: 2rem; text-transform: uppercase; color: #1a1a3a; margin-bottom: 20px; }
+        .content-section h4 { font-size: 1.3rem; color: #7b4dff; margin-top: 30px; }
+        .content-section h5 { font-size: 1.1rem; color: #1a1a3a; margin-top: 20px; }
+        .content-section a { color: #7b4dff; text-decoration: none; font-weight: bold; }
+
+        .close-btn {
+            background: none;
+            border: 2px solid #1a1a3a;
+            color: #1a1a3a;
+            padding: 5px 15px;
+            font-weight: 700;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 30px;
+        }
+
+        @media(max-width: 768px) {
+            footer { flex-direction: column; gap: 20px; }
+            .footer-nav ul { flex-wrap: wrap; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <h1>Geht es Oma<br>gut?</h1>
+            <h2>Gewaltschutz in Pflegeheim</h2>
+        </div>
+    </header>
+
+    <main>
+        <div class="main-content">
+            <p class="highlight-text">Hinschauen. Zuhören. Schützen.</p>
+            
+            <div id="countdown-container" class="countdown-container">
+                <p>Zeit für die Beantwortung bis 15.05.2026:</p>
+                <p id="countdown-timer" class="countdown-timer">Berechne Zeit...</p>
+            </div>
+
+            <div id="expired-message" class="expired-message">
+                Der Zeitraum für die Befragung ist vorbei. Vielen Dank für Ihre Unterstützung!
+            </div>
+
+            <p class="description" id="role-description">
+                Bitte wählen Sie Ihre Rolle aus, um zum Fragebogen zu gelangen:
+            </p>
+
+            <div class="button-container" id="survey-buttons">
+                <a href="https://www.survio.com/survey/d/X4W1E8E4F2G3A7A6Q" class="btn">Ich bin Pflegeperson</a>
+                <a href="https://www.survio.com/survey/d/J9F7I9A3I8T8U3T5N" class="btn">Ich bin Angehörige/r</a>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <button onclick="showSection('anmeldung')" class="btn" style="background-color: #7b4dff;">Anmeldung Präsentation</button>
+            </div>
+
+            <p class="description" style="margin-top: 40px;">
+                Ihre Stimme gegen Gewalt in der Pflege zählt!<br>
+                Ihre Rückmeldung hilft Schutz, Sicherheit und Menschlichkeit in der Pflege zu stärken.<br>
+            </p>
+        </div>
+    </main>
+
+    <!-- ANMELDUNG -->
+    <section id="anmeldung" class="content-section">
+        <h3>Anmeldung zur Präsentation</h3>
+        <p>Einrichtungsleitungen und Pflegedienstleitungen können sich hier für die Präsentation (online oder in Präsenz) anmelden.</p>
+        
+        <form action="https://gheydenreich.de/gewalt/senden.php" method="POST">
+            <div class="form-group">
+                <label>Name:</label>
+                <input type="text" name="name" class="form-control" required placeholder="Ihr Name">
+            </div>
+            <div class="form-group">
+                <label>Teilnahme:</label>
+                <select name="teilnahme" class="form-control" required>
+                    <option value="praesenz">In Präsenz</option>
+                    <option value="online">Online</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>E-Mail / Kontaktdaten:</label>
+                <input type="email" name="email" class="form-control" required placeholder="E-Mail Adresse">
+            </div>
+            <div class="form-group">
+                <label>Einrichtung / Sonstiges:</label>
+                <textarea name="nachricht" class="form-control" rows="3"></textarea>
+            </div>
+            <input type="text" name="website" style="display:none !important" tabindex="-1">
+            <button type="submit" class="btn" style="width: 100%; border: none;">Absenden</button>
+        </form>
+        <button class="close-btn" onclick="closeSection('anmeldung')">Abbrechen</button>
+    </section>
+
+    <!-- ÜBER UNS -->
+    <section id="ueber-uns" class="content-section">
+        <h3>Über uns – Unser Projekt für mehr Sicherheit in der Pflege</h3>
+        <p>Wir sind eine engagierte Gruppe von Studierenden im Bachelorstudiengang „Management im Gesundheitswesen“ an der Technischen Hochschule Würzburg-Schweinfurt (THWS). Im Rahmen unseres Praxisprojekts widmen wir uns einem sensiblen, aber enorm wichtigen Thema: dem Gewaltschutz in der stationären Altenpflege.</p>
+        <p>Unser übergeordnetes Ziel ist es, einen praxisnahen Leitfaden für Pflegeheime zu entwickeln. Dieser soll Einrichtungen dabei unterstützen, wirksame Schutzkonzepte zu etablieren, um die Sicherheit, Würde und das Wohlbefinden der Bewohnerinnen und Bewohner nachhaltig zu stärken.</p>
+        <h4>Warum diese Umfrage?</h4>
+        <p>Um einen Leitfaden zu erarbeiten, der in der Praxis wirklich funktioniert und hilft, müssen wir die Realität vor Ort genau verstehen. Mit dieser Befragung möchten wir den aktuellen Ist-Zustand in den Einrichtungen erfassen und konkrete Bedarfe ermitteln.</p>
+        <p>Dabei sind wir auf Ihre offenen und ehrlichen Erfahrungen angewiesen – ganz gleich, ob Sie als Pflegekraft täglich in den Heimen arbeiten oder als Angehörige bzw. Angehöriger Einblicke in den Pflegealltag haben. Nur wenn wir hinsehen und zuhören, können wir gemeinsam etwas verbessern.</p>
+        <p>Ihre Teilnahme ist vollständig anonym. Ihre Antworten fließen direkt in unsere Forschung ein und helfen uns maßgeblich dabei, die Pflege ein Stück sicherer und menschlicher zu machen.</p>
+        <p><strong>Vielen Dank für Ihre Zeit, Ihre Unterstützung und Ihr Vertrauen!</strong></p>
+        <button class="close-btn" onclick="closeSection('ueber-uns')">Schließen</button>
+    </section>
+
+    <!-- WAS TUN BEI GEWALT -->
+    <section id="was-tun-bei-gewalt" class="content-section">
+        <h3>Was tun bei Gewalt?</h3>
+        <p>Schauen Sie nicht weg. Holen Sie sich Hilfe. Bei Verdacht auf Gewalt in der Pflege gibt es konkrete Anlaufstellen.</p>
+        <h4>In Bayern: Pflege-SOS Bayern</h4>
+        <p>Das Pflege-SOS-Bayern ist unter der Telefonnummer <a href="tel:096219669660">09621 966 966 0</a> oder per E-Mail unter <a href="mailto:Pflege-SOS@lfp.bayern.de">Pflege-SOS@lfp.bayern.de</a> zu erreichen.</p>
+        <button class="close-btn" onclick="closeSection('was-tun-bei-gewalt')">Schließen</button>
+    </section>
+
+    <!-- IMPRESSUM -->
+    <section id="impressum" class="content-section">
+        <h3>Impressum</h3>
+        <p><strong>Angaben gemäß § 5 DDG:</strong></p>
+        <p>Gregor Heydenreich<br>Schleifweg 4<br>97286 Sommerhausen</p>
+        <p><strong>Kontakt:</strong><br>E-Mail: gregor.heydenreich@gmail.com</p>
+        <button class="close-btn" onclick="closeSection('impressum')">Schließen</button>
+    </section>
+
+    <!-- DATENSCHUTZ -->
+    <section id="datenschutz" class="content-section">
+        <h3>Datenschutzerklärung</h3>
+        <h4>1. Datenschutz auf einen Blick</h4>
+        <p>Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen (z.B. im Anmeldeformular). Das Hosting erfolgt über GitHub Pages. Bei Nutzung des Anmeldeformulars werden Ihre Daten an unseren eigenen Server (gheydenreich.de) zur E-Mail-Übermittlung weitergeleitet.</p>
+        <p>Sie haben das Recht auf Auskunft, Berichtigung und Löschung Ihrer Daten.</p>
+        <button class="close-btn" onclick="closeSection('datenschutz')">Schließen</button>
+    </section>
+
+    <footer>
+        <div class="footer-left">
+            <span style="font-weight:700; font-size:0.9rem;">Projekt der</span>
+            <img src="images/thws_logo.png" alt="THWS Logo" class="thws-logo">
+        </div>
+        <div class="footer-right">
+            <nav class="footer-nav">
+                <ul>
+                    <li><a onclick="showSection('anmeldung')">Anmeldung</a></li>
+                    <li><a onclick="showSection('ueber-uns')">Über uns</a></li>
+                    <li><a onclick="showSection('impressum')">Impressum</a></li>
+                    <li><a onclick="showSection('datenschutz')">Datenschutz</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+
+    <script>
+        // Countdown
+        const targetDate = new Date("2026-05-15T00:00:00").getTime();
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+            const timer = document.getElementById("countdown-timer");
+            if (distance <= 0) {
+                document.getElementById("countdown-container").style.display = "none";
+                document.getElementById("expired-message").style.display = "block";
+            } else {
+                const d = Math.floor(distance / 86400000);
+                const h = Math.floor((distance % 86400000) / 3600000);
+                const m = Math.floor((distance % 3600000) / 60000);
+                timer.innerHTML = `Noch ${d} Tage, ${h} Stunden, ${m} Minuten`;
+            }
+        }
+        setInterval(updateCountdown, 1000); updateCountdown();
+
+        // Navigation
+        function showSection(id) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            const target = document.getElementById(id);
+            if(target) {
+                target.classList.add('active');
+                setTimeout(() => target.scrollIntoView({behavior:'smooth'}), 50);
+            }
+        }
+        function closeSection(id) { document.getElementById(id).classList.remove('active'); }
+    </script>
+</body>
+</html>
