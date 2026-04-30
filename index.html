@@ -82,6 +82,46 @@
             line-height: 1.5;
         }
 
+        /* Formular Styling */
+        .form-group {
+            width: 100%;
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #1a1a3a;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #a4bdf6;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #7b4dff;
+        }
+
+        .success-message {
+            display: none;
+            background-color: #d0f0eb;
+            color: #1a1a3a;
+            border-left: 5px solid #7b4dff;
+            padding: 20px;
+            border-radius: 5px;
+            font-weight: 700;
+            margin-top: 20px;
+        }
+
         /* ------------------------------------- */
         /* Countdown & Ablauf-Nachricht          */
         /* ------------------------------------- */
@@ -156,6 +196,8 @@
             max-width: 300px;
             box-sizing: border-box;
             border: 2px solid transparent;
+            cursor: pointer;
+            display: inline-block;
         }
 
         .btn:hover {
@@ -384,11 +426,21 @@
                 <a href="https://www.survio.com/survey/d/X4W1E8E4F2G3A7A6Q" class="btn">Ich bin Pflegeperson</a>
                 <a href="https://www.survio.com/survey/d/J9F7I9A3I8T8U3T5N" class="btn">Ich bin Angehörige/r</a>
             </div>
-
-            <p class="redirect-note" id="redirect-note">Hinweis: Mit Klick auf die Auswahl werden Sie auf die entsprechende Fragebogen-Website weitergeleitet.</p>
-
+            
             <p class="footer-note">Teilnahme vollständig<br>freiwillig und anonym</p>
 
+            <p class="redirect-note" id="redirect-note" style="margin-bottom: 40px;">Hinweis: Mit Klick auf die Auswahl werden Sie auf die entsprechende Fragebogen-Website weitergeleitet.</p>
+
+            <p class="description" style="font-size: 1.1rem; margin-bottom: 20px;">
+                Die Ergebnisse und Präsentation der Ergebnisse der Umfrage und den fertigen Leitfaden werden wir am 02.07.2026 vorstellen. Die Präsentation der Ergebnisse wird sowohl in Präsenz als auch Online vorgestellt. Bei Interesse melden sie sich bitte unverbindlich hier an!
+            </p>
+
+            <!-- NEUER ANMELDE BUTTON -->
+            <div style="margin-top: 10px;">
+                <button onclick="showSection('anmeldung')" class="btn" style="background-color: #7b4dff;">Anmeldung</button>
+            </div>
+
+           
             <p class="description">
                 Ihre Stimme gegen Gewalt in der Pflege zählt!<br>
                 Ihre Rückmeldung hilft Schutz, Sicherheit und Menschlichkeit in der Pflege zu stärken.<br>
@@ -405,6 +457,7 @@
         <div class="footer-right">
             <nav class="footer-nav">
                 <ul>
+                    <li><a onclick="showSection('anmeldung')">Anmeldung</a></li>
                     <li><a onclick="showSection('ueber-uns')">Über uns</a></li>
                     <li><a onclick="showSection('was-tun-bei-gewalt')">Was tun bei Gewalt</a></li>
                     <li><a onclick="showSection('impressum')">Impressum</a></li>
@@ -413,6 +466,49 @@
             </nav>
         </div>
     </footer>
+
+    <!-- NEUE SEKTION: ANMELDUNG -->
+    <section id="anmeldung" class="content-section">
+        <h3>Anmeldung zur Präsentation</h3>
+        <p>Melden sie sich hier an. Sobald wir den Link für die Online-Veranstaltung oder die Daten für die Präsenzpräsentation haben, nehmen wir mit Ihnen Kontakt auf</p>
+        
+        <!-- Erfolgsmeldung (standardmäßig versteckt) -->
+        <div id="form-success-message" class="success-message">
+            Vielen Dank. Wir haben Ihre Daten erhalten und senden Ihnen die Daten zur Veranstaltung sobald wie möglich zu.
+        </div>
+
+        <form id="anmeldeFormular" action="https://gheydenreich.de/gewalt/senden.php" method="POST">
+            <div class="form-group">
+                <label>Vollständiger Name:</label>
+                <input type="text" name="name" class="form-control" required placeholder="Ihr Name">
+            </div>
+
+            <div class="form-group">
+                <label>Art der Teilnahme:</label>
+                <select name="teilnahme" class="form-control" required>
+                    <option value="online">Online-Teilnahme</option>
+                    <option value="praesenz">In Präsenz</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>E-Mail-Adresse:</label>
+                <input type="email" name="email" class="form-control" required placeholder="pflegegewaltfrei@email.de">
+            </div>
+
+            <div class="form-group">
+                <label>Einrichtung / Sonstiges:</label>
+                <textarea name="nachricht" class="form-control" rows="4" placeholder="Name der Einrichtung oder Anmerkungen"></textarea>
+            </div>
+
+            <!-- Honeypot -->
+            <input type="text" name="website" style="display:none !important" tabindex="-1" autocomplete="off">
+
+            <button type="submit" id="submitBtn" class="btn" style="width: 100%; border: none;">Anmeldung absenden</button>
+        </form>
+
+        <button class="close-btn" onclick="closeSection('anmeldung')">Schließen</button>
+    </section>
 
     <section id="ueber-uns" class="content-section">
         <h3>Über uns – Unser Projekt für mehr Sicherheit in der Pflege</h3>
@@ -585,6 +681,41 @@
 
             updateCountdown();
             const timerInterval = setInterval(updateCountdown, 1000);
+
+            // AJAX Formular Submit (ohne Reload)
+            const anmeldeFormular = document.getElementById('anmeldeFormular');
+            if (anmeldeFormular) {
+                anmeldeFormular.addEventListener('submit', function(e) {
+                    e.preventDefault(); // Verhindert den normalen Seitenwechsel
+
+                    const form = this;
+                    const formData = new FormData(form);
+                    const submitBtn = document.getElementById('submitBtn');
+
+                    // Button visuell verändern
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Wird gesendet...';
+
+                    fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        mode: 'no-cors' // <-- Dieser Befehl umgeht den strengen CORS-Fehler des Browsers
+                    })
+                    .then(() => {
+                        // Da das Formular abgesendet wurde (Mail kommt an), zeigen wir direkt den Erfolg an
+                        form.style.display = 'none';
+                        document.getElementById('form-success-message').style.display = 'block';
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Anmeldung absenden';
+                    })
+                    .catch(error => {
+                        // Netzwerkfehler
+                        alert('Netzwerkfehler. Bitte überprüfen Sie Ihre Internetverbindung.');
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Anmeldung absenden';
+                    });
+                });
+            }
         });
 
         // Menü-Navigation
@@ -595,7 +726,10 @@
             const targetSection = document.getElementById(sectionId);
             if (targetSection) {
                 targetSection.classList.add('active');
-                targetSection.scrollIntoView({ behavior: 'smooth' });
+                // Eine kleine Verzögerung sorgt für ein flüssigeres Scrollen nach Start der Animation.
+                setTimeout(() => {
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 10);
             }
         }
 
@@ -603,6 +737,15 @@
             const targetSection = document.getElementById(sectionId);
             if (targetSection) {
                 targetSection.classList.remove('active');
+                // Wenn das Formular geschlossen wird, setzen wir es bei Bedarf wieder zurück
+                if (sectionId === 'anmeldung') {
+                    document.getElementById('anmeldeFormular').style.display = 'block';
+                    document.getElementById('form-success-message').style.display = 'none';
+                    document.getElementById('anmeldeFormular').reset();
+                    const submitBtn = document.getElementById('submitBtn');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Anmeldung absenden';
+                }
             }
         }
     </script>
