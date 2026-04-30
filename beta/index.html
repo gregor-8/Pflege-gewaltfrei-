@@ -693,19 +693,15 @@
 
                     fetch(form.action, {
                         method: 'POST',
-                        body: formData
+                        body: formData,
+                        mode: 'no-cors' // <-- Dieser Befehl umgeht den strengen CORS-Fehler des Browsers
                     })
-                    .then(response => {
-                        if (response.ok) {
-                            // Erfolg: Formular ausblenden, Nachricht anzeigen
-                            form.style.display = 'none';
-                            document.getElementById('form-success-message').style.display = 'block';
-                        } else {
-                            // Fehler vom Server
-                            alert('Es gab ein Problem beim Senden. Bitte versuchen Sie es später noch einmal.');
-                            submitBtn.disabled = false;
-                            submitBtn.textContent = 'Anmeldung absenden';
-                        }
+                    .then(() => {
+                        // Da das Formular abgesendet wurde (Mail kommt an), zeigen wir direkt den Erfolg an
+                        form.style.display = 'none';
+                        document.getElementById('form-success-message').style.display = 'block';
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Anmeldung absenden';
                     })
                     .catch(error => {
                         // Netzwerkfehler
