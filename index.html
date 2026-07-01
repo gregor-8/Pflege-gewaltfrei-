@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gewaltschutz in Pflegeheim - Umfrage & Info</title>
+    <title>Gewaltschutz in Pflegeheim - Info & Downloads</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         /* Grundlegende Einstellungen */
@@ -180,6 +180,7 @@
             .button-container {
                 flex-direction: row;
                 justify-content: center;
+                flex-wrap: wrap; /* Hinzugefügt, damit die 3 Buttons bei wenig Platz gut umbrechen */
             }
         }
 
@@ -198,6 +199,7 @@
             border: 2px solid transparent;
             cursor: pointer;
             display: inline-block;
+            text-align: center;
         }
 
         .btn:hover {
@@ -409,30 +411,15 @@
         <div class="main-content">
             <p class="highlight-text">Hinschauen. Zuhören. Schützen.</p>
             
-            <div id="countdown-container" class="countdown-container">
-                <p>Zeit für die Beantwortung bis 15.05.2026:</p>
-                <p id="countdown-timer" class="countdown-timer">Berechne Zeit...</p>
-            </div>
-
-            <div id="expired-message" class="expired-message">
-                Der Zeitraum für die Befragung ist vorbei. Vielen Dank für Ihre Unterstützung!
-            </div>
-
-  
-            <p class="description" style="font-size: 1.1rem; margin-bottom: 20px;">
-                Die Ergebnisse und Präsentation der Ergebnisse der Umfrage und den fertigen Leitfaden werden wir am 02.07.2026 vorstellen. Die Präsentation der Ergebnisse wird sowohl in Präsenz als auch Online vorgestellt. Bei Interesse melden sie sich bitte unverbindlich hier an!
+            <p class="description" style="font-size: 1.1rem; margin-bottom: 30px;">
+                Hinweis: Bei Klick auf einen der untenstehenden Buttons startet automatisch der Download der jeweiligen Datei.
             </p>
 
-            <!-- NEUER ANMELDE BUTTON -->
-            <div style="margin-top: 10px;">
-                <button onclick="showSection('anmeldung')" class="btn" style="background-color: #7b4dff;">Anmeldung</button>
+            <div class="button-container">
+                <a href="files/Gewaltschutz in Pflegeheimen - Leitfaden.pdf" download class="btn" style="background-color: #7b4dff;">Unser Leitfaden</a>
+                <a href="files/Gewaltschutz in Pflegeheimen - Präsentation.pdf" download class="btn" style="background-color: #7b4dff;">Unsere Präsentation</a>
+                <a href="files/Gewaltschutz in Pflegeheimen - Daten.xlsx" download class="btn" style="background-color: #7b4dff;">Unser Datensatz</a>
             </div>
-
-           
-            <p class="description">
-                Ihre Stimme gegen Gewalt in der Pflege zählt!<br>
-                Ihre Rückmeldung hilft Schutz, Sicherheit und Menschlichkeit in der Pflege zu stärken.<br>
-            </p>
             
         </div>
     </main>
@@ -445,7 +432,6 @@
         <div class="footer-right">
             <nav class="footer-nav">
                 <ul>
-                    <li><a onclick="showSection('anmeldung')">Anmeldung</a></li>
                     <li><a onclick="showSection('ueber-uns')">Über uns</a></li>
                     <li><a onclick="showSection('was-tun-bei-gewalt')">Was tun bei Gewalt</a></li>
                     <li><a onclick="showSection('impressum')">Impressum</a></li>
@@ -454,49 +440,6 @@
             </nav>
         </div>
     </footer>
-
-    <!-- NEUE SEKTION: ANMELDUNG -->
-    <section id="anmeldung" class="content-section">
-        <h3>Anmeldung zur Präsentation</h3>
-        <p>Melden sie sich hier an. Sobald wir den Link für die Online-Veranstaltung oder die Daten für die Präsenzpräsentation haben, nehmen wir mit Ihnen Kontakt auf</p>
-        
-        <!-- Erfolgsmeldung (standardmäßig versteckt) -->
-        <div id="form-success-message" class="success-message">
-            Vielen Dank. Wir haben Ihre Daten erhalten und senden Ihnen die Daten zur Veranstaltung sobald wie möglich zu.
-        </div>
-
-        <form id="anmeldeFormular" action="https://gheydenreich.de/gewalt/senden.php" method="POST">
-            <div class="form-group">
-                <label>Vollständiger Name:</label>
-                <input type="text" name="name" class="form-control" required placeholder="Ihr Name">
-            </div>
-
-            <div class="form-group">
-                <label>Art der Teilnahme:</label>
-                <select name="teilnahme" class="form-control" required>
-                    <option value="online">Online-Teilnahme</option>
-                    <option value="praesenz">In Präsenz</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>E-Mail-Adresse:</label>
-                <input type="email" name="email" class="form-control" required placeholder="pflegegewaltfrei@email.de">
-            </div>
-
-            <div class="form-group">
-                <label>Einrichtung / Sonstiges:</label>
-                <textarea name="nachricht" class="form-control" rows="4" placeholder="Name der Einrichtung oder Anmerkungen"></textarea>
-            </div>
-
-            <!-- Honeypot -->
-            <input type="text" name="website" style="display:none !important" tabindex="-1" autocomplete="off">
-
-            <button type="submit" id="submitBtn" class="btn" style="width: 100%; border: none;">Anmeldung absenden</button>
-        </form>
-
-        <button class="close-btn" onclick="closeSection('anmeldung')">Schließen</button>
-    </section>
 
     <section id="ueber-uns" class="content-section">
         <h3>Über uns – Unser Projekt für mehr Sicherheit in der Pflege</h3>
@@ -632,78 +575,6 @@
                     link.textContent = fullEmail;
                 }
             });
-
-            // Countdown und Sichtbarkeits-Logik
-            const targetDate = new Date("2026-05-15T00:00:00").getTime();
-            
-            const countdownContainer = document.getElementById("countdown-container");
-            const countdownTimer = document.getElementById("countdown-timer");
-            const surveyButtons = document.getElementById("survey-buttons");
-            const redirectNote = document.getElementById("redirect-note");
-            const roleDescription = document.getElementById("role-description");
-            const expiredMessage = document.getElementById("expired-message");
-
-            function updateCountdown() {
-                const now = new Date().getTime();
-                const distance = targetDate - now;
-
-                if (distance <= 0) {
-                    // Zeit ist abgelaufen!
-                    clearInterval(timerInterval); 
-                    
-                    countdownContainer.style.display = "none";
-                    surveyButtons.style.display = "none";
-                    redirectNote.style.display = "none";
-                    roleDescription.style.display = "none";
-                    
-                    expiredMessage.style.display = "block";
-                } else {
-                    // Zeit berechnen
-                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                    
-                    countdownTimer.innerHTML = `Noch ${days} Tage, ${hours} Stunden, ${minutes} Minuten`;
-                }
-            }
-
-            updateCountdown();
-            const timerInterval = setInterval(updateCountdown, 1000);
-
-            // AJAX Formular Submit (ohne Reload)
-            const anmeldeFormular = document.getElementById('anmeldeFormular');
-            if (anmeldeFormular) {
-                anmeldeFormular.addEventListener('submit', function(e) {
-                    e.preventDefault(); // Verhindert den normalen Seitenwechsel
-
-                    const form = this;
-                    const formData = new FormData(form);
-                    const submitBtn = document.getElementById('submitBtn');
-
-                    // Button visuell verändern
-                    submitBtn.disabled = true;
-                    submitBtn.textContent = 'Wird gesendet...';
-
-                    fetch(form.action, {
-                        method: 'POST',
-                        body: formData,
-                        mode: 'no-cors' // <-- Dieser Befehl umgeht den strengen CORS-Fehler des Browsers
-                    })
-                    .then(() => {
-                        // Da das Formular abgesendet wurde (Mail kommt an), zeigen wir direkt den Erfolg an
-                        form.style.display = 'none';
-                        document.getElementById('form-success-message').style.display = 'block';
-                        submitBtn.disabled = false;
-                        submitBtn.textContent = 'Anmeldung absenden';
-                    })
-                    .catch(error => {
-                        // Netzwerkfehler
-                        alert('Netzwerkfehler. Bitte überprüfen Sie Ihre Internetverbindung.');
-                        submitBtn.disabled = false;
-                        submitBtn.textContent = 'Anmeldung absenden';
-                    });
-                });
-            }
         });
 
         // Menü-Navigation
@@ -725,15 +596,6 @@
             const targetSection = document.getElementById(sectionId);
             if (targetSection) {
                 targetSection.classList.remove('active');
-                // Wenn das Formular geschlossen wird, setzen wir es bei Bedarf wieder zurück
-                if (sectionId === 'anmeldung') {
-                    document.getElementById('anmeldeFormular').style.display = 'block';
-                    document.getElementById('form-success-message').style.display = 'none';
-                    document.getElementById('anmeldeFormular').reset();
-                    const submitBtn = document.getElementById('submitBtn');
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Anmeldung absenden';
-                }
             }
         }
     </script>
